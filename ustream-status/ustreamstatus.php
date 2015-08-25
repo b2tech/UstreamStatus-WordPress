@@ -88,7 +88,7 @@ class wp_ustream_status_widget extends WP_Widget {
 		$offline = esc_url($instance['offline']);
 		$stream = esc_url($instance['stream']);
     $ustream_address = 'http://www.ustream.tv/channel/' . $account;
-
+    $wrapper_class = 'stream_link';
     
 
         echo $before_widget;
@@ -115,9 +115,11 @@ class wp_ustream_status_widget extends WP_Widget {
 			{
 			case 'live':
 				$UstStatus = 1;
+        $wrapper_class .= ' now_live';
 			break;
 			case 'offline':
 				$UstStatus = 2;
+        $wrapper_class .= ' now_offline';
 			break;
 			case 'error':
 				$UstStatus = false;
@@ -125,7 +127,7 @@ class wp_ustream_status_widget extends WP_Widget {
 			}
 		if ($UstStatus == 1) {
 		?>
-			<div align="center"><a href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
+			<div align="center"><a class="<?php echo $wrapper_class ?>" href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
 			<img src="<?php echo $online; ?>" alt="<?php _e('Live now'); ?>" target="_blank" />
 			</a></div>
 		<?php
@@ -134,7 +136,7 @@ class wp_ustream_status_widget extends WP_Widget {
 		else if ($UstStatus == 2) {
 			// If not live, including when the API does not respond
 			?>
-			<div align="center"><a href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
+			<div align="center"><a class="<?php echo $wrapper_class ?>" href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
 			<img src="<?php echo $offline; ?>" alt="<?php _e('Offline'); ?>" />
 			</a></div>
 		<?php } else {
@@ -158,7 +160,7 @@ function ustream_status_shortcode($atts) {
     $offline = esc_url($atts['offline']);
     $stream = esc_url($atts['stream']);
     $ustream_address = 'http://www.ustream.tv/channel/' . $account;
-    
+    $wrapper_class = 'stream_link';
     // TRANSIENT STARTS HERE
     $transientName = 'wp_ustream_status_' . $account;
     if ( false === ( $UstStatusArray = get_transient( $transientName ) ) ) {
@@ -175,9 +177,11 @@ function ustream_status_shortcode($atts) {
         {
         case 'live':
             $UstStatus = 1;
+            $wrapper_class .= ' now_live';
         break;
         case 'offline':
             $UstStatus = 2;
+            $wrapper_class .= ' now_offline';
         break;
         case 'error':
             $UstStatus = false;
@@ -185,7 +189,7 @@ function ustream_status_shortcode($atts) {
         }
     if ($UstStatus == 1) {
     ?>
-        <a href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
+        <a class="<?php echo $wrapper_class ?>" href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
         <img src="<?php echo $online; ?>" alt="<?php _e('Live now'); ?>" target="_blank" />
         </a>
     <?php
@@ -194,7 +198,7 @@ function ustream_status_shortcode($atts) {
     else if ($UstStatus == 2) {
         // If not live, including when the API does not respond
         ?>
-        <a href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
+        <a class="<?php echo $wrapper_class ?>" href="<?php echo ( empty($stream) ? $ustream_address : $stream ); ?>" alt="<?php _e('Click here to visit the Ustream channel'); ?>" target="_blank">
         <img src="<?php echo $offline; ?>" alt="<?php _e('Offline'); ?>" />
         </a>
     <?php } else {
